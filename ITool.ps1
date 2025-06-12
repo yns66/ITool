@@ -9,7 +9,7 @@ Write-Host "3 - Disk Cleaneri Çalıştır."
 Write-Host "4 - TEMP PREFETCH ve CCMCACHE Temizle."
 Write-Host "5 - Önbellekteki Gereksiz Windows Güncelleme Dosyalarını Temizle Ve Performans İyileştirmesi Yap."
 Write-Host "6 - Bozuk Sistem Dosyalarını Onar."
-Write-Host "7 - GPO Temizle ve Tekrar Al."
+Write-Host "7 - GPO Temizle ve Tekrar GPO Al."
 Write-Host "8 - Outlook Durum Bilgisi Sorununu Düzeltme."
 
 
