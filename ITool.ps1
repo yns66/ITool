@@ -420,9 +420,9 @@ remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -errora
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-winget uninstall --name Microsoft Teams
-winget uninstall --name Teams Machine-Wide Installer
-winget uninstall --name Microsoft Teams Meeting Add-in for Microsoft Office
+winget uninstall --name "Microsoft Teams"
+winget uninstall --name "Teams Machine-Wide Installer"
+winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
 
 Write-Host ""
 Write-Host "İşlem Tamamlandı."
