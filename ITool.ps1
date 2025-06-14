@@ -1,4 +1,4 @@
-﻿While ($true) {
+While ($true) {
 
 
 #Seçim Ekranında Çıkacak Seçenekler.
@@ -9,8 +9,11 @@ Write-Host "3 - Disk Cleaneri Çalıştır."
 Write-Host "4 - TEMP PREFETCH ve CCMCACHE Temizle."
 Write-Host "5 - Önbellekteki Gereksiz Windows Güncelleme Dosyalarını Temizle Ve Performans İyileştirmesi Yap."
 Write-Host "6 - Bozuk Sistem Dosyalarını Onar."
-Write-Host "7 - GPO Temizle ve Tekrar GPO Al."
+Write-Host "7 - GPO Temizle ve Tekrar Al."
 Write-Host "8 - Outlook Durum Bilgisi Sorununu Düzeltme."
+Write-Host "9 - Ağ Bağlantı Sorununu Giderme."
+Write-Host "10 - Teams ve Bağlantılarını Temizle."
+
 
 
 
@@ -134,6 +137,7 @@ $form.Controls.Add($deleteButton)
 [void]$form.ShowDialog()
 
  
+Write-Host ""
 Write-Host "İşlem Tamamlandı."
    
 }
@@ -318,6 +322,7 @@ Function Cleanup {
         exit
     }
 
+Write-Host ""
 Write-Host "İşlem Tamamlandı."
 
 }
@@ -331,6 +336,7 @@ get-childitem "$env:windir\ccmcache\*" -recurse -file | remove-item -force -Erro
 get-childitem "$env:windir\Temp\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 get-childitem "$env:windir\Prefetch\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 
+Write-Host ""
 Write-Host "İşlem Tamamlandı."
 
 }
@@ -342,6 +348,7 @@ elseif($secim -eq 5){
 dism.exe /online /cleanup-image /startcomponentcleanup;
 dism.exe /online /cleanup-image /restorehealth
 
+Write-Host ""
 Write-Host "İşlem Tamamlandı."
 
 }
@@ -353,6 +360,7 @@ elseif($secim -eq 6){
 
 sfc /scannow
 
+Write-Host ""
 Write-Host "İşlem Tamamlandı."
 
 }
@@ -363,10 +371,12 @@ elseif($secim -eq 7){
 get-childitem "$env:windir\System32\GroupPolicyUsers" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 get-childitem "$env:windir\System32\GroupPolicy" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 
+Write-Host ""
 Write-Host "Silme İşlemi Tamamlandı."
 
 gpupdate /force
 
+Write-Host ""
 Write-Host "İşlem Tamamlandı."
 
 }
@@ -380,6 +390,44 @@ Write-Host "İşlem Tamamlandı."
 Write-Host "Dipnot: Teams Classic yüklü olması ve ayarlardan 
 Register teams as the chat app for office (requires restarting office applications)
 ayarı açık olması gerekiyor."
+}
+
+
+elseif($secim -eq 9){
+
+netsh int ip reset
+netsh winsock reset
+ipconfig -flushdns
+
+Write-Host ""
+Write-Host "İşlem Tamamlandı."
+Write-Host ""
+Write-Host "Display Dns Çıktısı Aşağıdadır."
+
+ipconfig -displaydns
+
+Read-Host "Devam Etmek İçin Herhangi Bir Tuşa Basınız."
+
+}
+
+
+elseif ($secim -eq 10){
+
+
+remove-item -path "$env:appdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
+winget uninstall --name Microsoft Teams
+winget uninstall --name Teams Machine-Wide Installer
+winget uninstall --name Microsoft Teams Meeting Add-in for Microsoft Office
+
+Write-Host ""
+Write-Host "İşlem Tamamlandı."
+
+
 }
 
 Start-Sleep -Second 2
