@@ -13,7 +13,7 @@ Write-Host "6 - Bozuk Sistem Dosyalarını Onar."
 Write-Host "7 - GPO Temizle ve Tekrar Al."
 Write-Host "8 - Outlook Durum Bilgisi Sorununu Düzeltme."
 Write-Host "9 - Ağ Bağlantı Sorununu Giderme."
-Write-Host "10 - Teams ve Bağlantılarını Temizle."
+Write-Host "10 - Teams ve Bağlantılarını Temizle. (Cihazda WINGET (App Installer Package) Komutunun Çalışması Gerekir.)"
 
 
 
