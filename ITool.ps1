@@ -335,6 +335,7 @@ elseif($secim -eq 4){
 get-childitem "$env:windir\ccmcache\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 get-childitem "$env:windir\Temp\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 get-childitem "$env:windir\Prefetch\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
+get-childitem "$env:localappdata\Temp\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 
 Write-Host ""
 Write-Host "İşlem Tamamlandı."
