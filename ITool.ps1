@@ -1,5 +1,6 @@
 While ($true) {
 
+Clear-Host
 
 #Seçim Ekranında Çıkacak Seçenekler.
 
@@ -19,6 +20,7 @@ Write-Host "10 - Teams ve Bağlantılarını Temizle."
 
 #Komutlar.
 
+Write-Host ""
 $secim = Read-Host "Lütfen seçim yapınız."
 
 
@@ -431,6 +433,7 @@ Write-Host "İşlem Tamamlandı."
 
 }
 
-Start-Sleep -Second 2
+Write-Host ""
+Read-Host "Ana Menüye Dönmek İçin Herhangi Bir Tuşa Basınız."
 Clear-Host
 }
