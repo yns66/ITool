@@ -416,16 +416,36 @@ Read-Host "Devam Etmek İçin Herhangi Bir Tuşa Basınız."
 
 elseif ($secim -eq 10){
 
-
+#Appdatadaki teams bağlantılarını temizle.
 remove-item -path "$env:appdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
+
+#Winget ile teams ve bağlantılarını temizle.
 winget uninstall --name "Microsoft Teams"
 winget uninstall --name "Teams Machine-Wide Installer"
 winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
+
+# Hedef klasör ve dosya yolu
+$sourcePath = "\\Paylaşılan teams zipinin dizin bilgisini giriniz. (klasör aralarındaki "\" işareti yerine "\\" 2 tane konulmalı)"
+$destinationPath = "D:\\"
+$desktopPath = [Environment]::GetFolderPath("Desktop")
+ 
+# Dosya kopyalama
+Copy-Item -Path $sourcePath -Destination $destinationPath
+ 
+# Zipten çıkarma
+$zipFile = $destinationPath + "MSTeams-x64.zip"
+$extractPath = $destinationPath + "MSTeams-x64"
+Expand-Archive -Path $zipFile -DestinationPath $extractPath -Force
+ 
+# Teams uygulamasını masaüstüne kopyalama ve adını değiştirme
+$teamsPath = $extractPath + "\\Teams.exe"
+$teamsDestinationPath = $desktopPath + "\\Teams.exe"
+Copy-Item -Path $teamsPath -Destination $teamsDestinationPath
 
 Write-Host ""
 Write-Host "İşlem Tamamlandı."
