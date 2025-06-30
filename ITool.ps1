@@ -44,12 +44,13 @@ elseif ($secim -eq 2) {
 
   
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
 
 $excludeUsers = @('b_agcan2', 'f_ozcan4', 'ADMINI~1', 'administrator', 'public', 'NetworkService', 'LocalService', 'systemprofile')
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Kullanıcı Profili Silici"
-$form.Size = New-Object System.Drawing.Size(400,500)
+$form.Size = New-Object System.Drawing.Size(400,580)
 $form.StartPosition = "CenterScreen"
 
 $listView = New-Object System.Windows.Forms.ListView
@@ -58,7 +59,20 @@ $listView.CheckBoxes = $true
 $listView.FullRowSelect = $true
 $listView.Size = New-Object System.Drawing.Size(360,350)
 $listView.Location = New-Object System.Drawing.Point(10,10)
-$listView.Columns.Add("Kullanıcı Adı", 340)
+$listView.Columns.Add("Kullanıcı Adı", 150)
+$listView.Columns.Add("Son Oturum Açma Zamanı", 190)
+
+$progressBar = New-Object System.Windows.Forms.ProgressBar
+$progressBar.Size = New-Object System.Drawing.Size(360,20)
+$progressBar.Location = New-Object System.Drawing.Point(10,410)
+$progressBar.Minimum = 0
+$progressBar.Maximum = 100
+$progressBar.Step = 1
+
+$progressLabel = New-Object System.Windows.Forms.Label
+$progressLabel.Text = "0%"
+$progressLabel.AutoSize = $true
+$progressLabel.Location = New-Object System.Drawing.Point(180,435)
 
 try {
     $profiles = Get-CimInstance -Class Win32_UserProfile | Where-Object {
@@ -71,7 +85,14 @@ try {
 
 foreach ($profile in $profiles) {
     $username = $profile.LocalPath.Split('\')[-1]
+    $lastUseTime = $profile.LastUseTime
+    if ($lastUseTime -eq $null) {
+        $lastUseTime = "Bilgi Yok"
+    } else {
+        $lastUseTime = $lastUseTime.ToString("yyyy-MM-dd HH:mm:ss")
+    }
     $item = New-Object System.Windows.Forms.ListViewItem($username)
+    $item.SubItems.Add($lastUseTime)
     $item.Tag = $profile
     $listView.Items.Add($item)
 }
@@ -111,6 +132,8 @@ $deleteButton.Add_Click({
 
     if ($confirm -eq [System.Windows.Forms.DialogResult]::Yes) {
         $hataMesaji = ""
+        $total = $listView.CheckedItems.Count
+        $i = 0
         foreach ($item in $listView.CheckedItems) {
             $profile = $item.Tag
             $username = $item.Text
@@ -119,6 +142,11 @@ $deleteButton.Add_Click({
             } catch {
                 $hataMesaji += "Profil silinemedi: $username`nHata: $_`n"
             }
+            $i++
+            $progressBar.Value = ($i / $total) * 100
+            $progressLabel.Text = "{0}%" -f $progressBar.Value
+            $form.Refresh()
+            Start-Sleep -Milliseconds 100
         }
         if ($hataMesaji -ne "") {
             $form.BringToFront()
@@ -135,6 +163,8 @@ $form.Controls.Add($listView)
 $form.Controls.Add($selectAllButton)
 $form.Controls.Add($deselectAllButton)
 $form.Controls.Add($deleteButton)
+$form.Controls.Add($progressBar)
+$form.Controls.Add($progressLabel)
 
 [void]$form.ShowDialog()
 
@@ -416,21 +446,19 @@ Read-Host "Devam Etmek İçin Herhangi Bir Tuşa Basınız."
 
 elseif ($secim -eq 10){
 
-#Appdatadaki teams bağlantılarını temizle.
+
 remove-item -path "$env:appdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-
-#Winget ile teams ve bağlantılarını temizle.
 winget uninstall --name "Microsoft Teams"
 winget uninstall --name "Teams Machine-Wide Installer"
 winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
 
 # Hedef klasör ve dosya yolu
-$sourcePath = "\\Paylaşılan teams zipinin dizin bilgisini giriniz. (klasör aralarındaki "\" işareti yerine "\\" 2 tane konulmalı)"
+$sourcePath = "\\TT0047739-1\\yns_ortak\\Teams setup\\MSTeams-x64.zip"
 $destinationPath = "D:\\"
 $desktopPath = [Environment]::GetFolderPath("Desktop")
  
@@ -446,7 +474,6 @@ Expand-Archive -Path $zipFile -DestinationPath $extractPath -Force
 $teamsPath = $extractPath + "\\Teams.exe"
 $teamsDestinationPath = $desktopPath + "\\Teams.exe"
 Copy-Item -Path $teamsPath -Destination $teamsDestinationPath
-
 Write-Host ""
 Write-Host "İşlem Tamamlandı."
 
