@@ -4,16 +4,17 @@ Clear-Host
 
 #Seçim Ekranında Çıkacak Seçenekler.
 
-Write-Host "1 - Kopyala ve Yazdır."
-Write-Host "2 - Kullanıcı Temizlemeyi Çalıştır."
-Write-Host "3 - Disk Cleaneri Çalıştır."
-Write-Host "4 - TEMP PREFETCH ve CCMCACHE Temizle."
-Write-Host "5 - Önbellekteki Gereksiz Windows Güncelleme Dosyalarını Temizle Ve Performans İyileştirmesi Yap."
-Write-Host "6 - Bozuk Sistem Dosyalarını Onar."
-Write-Host "7 - GPO Temizle ve Tekrar Al."
-Write-Host "8 - Outlook Durum Bilgisi Sorununu Düzeltme."
-Write-Host "9 - Ağ Bağlantı Sorununu Giderme."
+Write-Host " 1 - Kopyala ve Yazdır."
+Write-Host " 2 - Kullanıcı Temizlemeyi Çalıştır."
+Write-Host " 3 - Disk Cleaneri Çalıştır."
+Write-Host " 4 - TEMP PREFETCH ve CCMCACHE Temizle."
+Write-Host " 5 - Önbellekteki Gereksiz Windows Güncelleme Dosyalarını Temizle Ve Performans İyileştirmesi Yap."
+Write-Host " 6 - Bozuk Sistem Dosyalarını Onar."
+Write-Host " 7 - GPO Temizle ve Tekrar Al."
+Write-Host " 8 - Outlook Durum Bilgisi Sorununu Düzeltme."
+Write-Host " 9 - Ağ Bağlantı Sorununu Giderme."
 Write-Host "10 - Teams ve Bağlantılarını Temizle. (Cihazda WINGET (App Installer Package) Komutunun Çalışması Gerekir.)"
+Write-Host "11 - Eski Sürüm Teamsı Silip Günceli İndir."
 
 
 
@@ -46,7 +47,9 @@ elseif ($secim -eq 2) {
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-$excludeUsers = @('b_agcan2', 'f_ozcan4', 'ADMINI~1', 'administrator', 'public', 'NetworkService', 'LocalService', 'systemprofile')
+$excludeUsers = @('b_agcan2', 'f_ozcan4', 'ADMINI~1', 'administrator', 'public', 'NetworkService', 'LocalService', 'systemprofile', 'NT AUTHORITY\SYSTEM', 'NT AUTHORITY\LOCAL SERVICE', 'NT AUTHORITY\NETWORK SERVICE')
+$currentUser = $env:USERNAME
+$excludeUsers += $currentUser
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Kullanıcı Profili Silici"
@@ -76,7 +79,7 @@ $progressLabel.Location = New-Object System.Drawing.Point(180,435)
 
 try {
     $profiles = Get-CimInstance -Class Win32_UserProfile | Where-Object {
-        $_.LocalPath -and ($_.LocalPath.Split('\')[-1] -notin $excludeUsers)
+        $_.LocalPath -and ($_.LocalPath.Split('\')[-1] -notin $excludeUsers) -and ($_.Loaded -eq $false)
     } | Sort-Object { $_.LocalPath.Split('\')[-1] }
 } catch {
     [System.Windows.Forms.MessageBox]::Show("Profil bilgileri alınamadı.`nHata: $_")
@@ -479,6 +482,56 @@ Write-Host "İşlem Tamamlandı."
 
 
 }
+
+
+elseif ($secim -eq 11){
+
+
+taskkill /f /im ms-teams.exe
+
+remove-item -path "$env:appdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
+remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
+winget uninstall --name "Microsoft Teams"
+winget uninstall --name "Teams Machine-Wide Installer"
+winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
+
+
+
+$regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"
+$regValueName = "DODownloadMode"
+$regValue = 0
+
+if (!(Test-Path $regPath)) {
+    New-Item -Path $regPath -Force
+}
+
+Set-ItemProperty -Path $regPath -Name $regValueName -Value $regValue -Type DWORD -Force
+
+
+
+$sourceUrl = "https://statics.teams.cdn.office.net/evergreen-assets/DesktopClient/MSTeamsSetup.exe"
+$destinationPath = "D:\"
+try {
+    Invoke-WebRequest -Uri $sourceUrl -OutFile (Join-Path -Path $destinationPath -ChildPath (Split-Path -Path $sourceUrl -Leaf))
+    Write-Host "Dosya başarıyla indirildi."
+} catch {
+    Write-Host "İndirme sırasında bir hata oluştu: $($Error[0].Message)"
+}
+
+Start-Sleep -Seconds 1
+Start-Process "D:\MSTeamsSetup.exe"
+
+
+
+Write-Host ""
+Write-Host "İşlem Tamamlandı."
+
+}
+
 
 Write-Host ""
 Read-Host "Ana Menüye Dönmek İçin Herhangi Bir Tuşa Basınız."
