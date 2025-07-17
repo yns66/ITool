@@ -15,7 +15,7 @@ Write-Host " 8 - Outlook Durum Bilgisi Sorununu Düzeltme."
 Write-Host " 9 - Ağ Bağlantı Sorununu Giderme."
 Write-Host "10 - Teams ve Bağlantılarını Temizle. (Cihazda WINGET (App Installer Package) Komutunun Çalışması Gerekir.)"
 Write-Host "11 - Eski Sürüm Teamsı Silip Günceli İndir."
-
+Write-Host "12 - Microsoft Management Console (MMC) Komutları."
 
 
 
@@ -456,27 +456,11 @@ remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -errora
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams"
-winget uninstall --name "Teams Machine-Wide Installer"
-winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
+winget uninstall --name "Microsoft Teams" -erroraction silentlycontinue -recurse
+winget uninstall --name "Teams Machine-Wide Installer" -erroraction silentlycontinue -recurse
+winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office" -erroraction silentlycontinue -recurse
 
-# Hedef klasör ve dosya yolu
-$sourcePath = "\\TT0047739-1\\yns_ortak\\Teams setup\\MSTeams-x64.zip"
-$destinationPath = "D:\\"
-$desktopPath = [Environment]::GetFolderPath("Desktop")
- 
-# Dosya kopyalama
-Copy-Item -Path $sourcePath -Destination $destinationPath
- 
-# Zipten çıkarma
-$zipFile = $destinationPath + "MSTeams-x64.zip"
-$extractPath = $destinationPath + "MSTeams-x64"
-Expand-Archive -Path $zipFile -DestinationPath $extractPath -Force
- 
-# Teams uygulamasını masaüstüne kopyalama ve adını değiştirme
-$teamsPath = $extractPath + "\\Teams.exe"
-$teamsDestinationPath = $desktopPath + "\\Teams.exe"
-Copy-Item -Path $teamsPath -Destination $teamsDestinationPath
+
 Write-Host ""
 Write-Host "İşlem Tamamlandı."
 
@@ -495,9 +479,9 @@ remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -errora
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams"
-winget uninstall --name "Teams Machine-Wide Installer"
-winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
+winget uninstall --name "Microsoft Teams" -erroraction silentlycontinue -recurse
+winget uninstall --name "Teams Machine-Wide Installer" -erroraction silentlycontinue -recurse
+winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office" -erroraction silentlycontinue -recurse
 
 
 
@@ -529,6 +513,76 @@ Start-Process "D:\MSTeamsSetup.exe"
 
 Write-Host ""
 Write-Host "İşlem Tamamlandı."
+
+}
+
+
+if ($secim -eq 12) {
+    Write-Host "Disk Management Paneli"
+    Write-Host "-------------------------"
+    Write-Host " 0. Geri Dön"
+    Write-Host " 1. Disk Management Panelini Aç"
+    Write-Host " 2. Kaydedilen Kullanıcı Adı ve Şifreler Paneli Aç"
+    Write-Host " 3. Security Policy Panelini Aç"
+    Write-Host " 4. Group Policy Panelini Aç"
+    Write-Host " 5. Program Ekle ve Kaldır Panelini Aç"
+    Write-Host " 6. Ağ Yönetim Panelini Aç"
+    Write-Host " 7. İnternet Ayarları Panelini Aç"
+    Write-Host " 8. Bilgisayar Yönetimi Panelini Aç"
+    Write-Host " 9. Yazıcı Yönetim Panelini Aç"
+    Write-Host "10. Sertifika Panelini Aç"
+
+
+
+    $altSecim = Read-Host "Seçiminizi girin"
+
+    if ($altSecim -eq 0) {
+
+        # Geri dönme işlemini burada tanımlayabilirsiniz
+        Write-Host "Geçersiz seçim. Lütfen tekrar deneyin."
+        }
+
+     elseif ($altSecim -eq 1) {
+        Start-Process diskmgmt.msc
+    }        
+    
+    elseif ($altSecim -eq 2) {
+        Start-Process rundll32.exe keymgr.dll,KRShowKeyMgr
+    }        
+
+    elseif ($altSecim -eq 3) {
+        Start-Process secpol.msc
+    }        
+
+
+    elseif ($altSecim -eq 4) {
+        Start-Process gpedit.msc
+    }        
+
+    elseif ($altSecim -eq 5) {
+        Start-Process appwiz.cpl
+    }        
+
+    elseif ($altSecim -eq 6) {
+        Start-Process ncpa.cpl
+    }        
+
+    elseif ($altSecim -eq 7) {
+        Start-Process inetcpl.cpl
+    }        
+
+    elseif ($altSecim -eq 8) {
+        Start-Process compmgmt.msc
+    }        
+
+    elseif ($altSecim -eq 9) {
+        Start-Process printmanagement.msc
+    }        
+
+    elseif ($altSecim -eq 10) {
+        Start-Process certmgr.msc
+    }        
+
 
 }
 
