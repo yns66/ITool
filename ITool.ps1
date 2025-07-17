@@ -18,7 +18,6 @@ Write-Host "11 - Eski Sürüm Teamsı Silip Günceli İndir."
 Write-Host "12 - Microsoft Management Console (MMC) Komutları."
 
 
-
 #Komutlar.
 
 Write-Host ""
@@ -38,7 +37,6 @@ $clip = [System.Windows.Forms.Clipboard]::GetText()
 [System.Windows.Forms.SendKeys]::SendWait($clip)
 
 }
-
 
 
 elseif ($secim -eq 2) {
