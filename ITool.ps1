@@ -4,7 +4,7 @@ Clear-Host
 
 #Seçim Ekranında Çıkacak Seçenekler.
 
-Write-Host " 1 - Kopyala ve Yazdır."
+Write-Host " 1 - Çıkış."
 Write-Host " 2 - Kullanıcı Temizlemeyi Çalıştır."
 Write-Host " 3 - Disk Cleaneri Çalıştır."
 Write-Host " 4 - TEMP PREFETCH ve CCMCACHE Temizle."
@@ -26,15 +26,7 @@ $secim = Read-Host "Lütfen seçim yapınız."
 
 if ($secim -eq 1 ){
 
-Add-Type -AssemblyName System.Windows.Forms
-
-Start-Sleep -Seconds 1  # 1 saniye bekle
-
-# Panodaki metni al
-$clip = [System.Windows.Forms.Clipboard]::GetText()
-
-# SendKeys ile metni yaz
-[System.Windows.Forms.SendKeys]::SendWait($clip)
+exit
 
 }
 
