@@ -2,6 +2,37 @@ While ($true) {
 
 Clear-Host
 
+$host.UI.RawUI.BackgroundColor = "DarkRed"
+$host.UI.RawUI.ForegroundColor = "White"
+
+cls
+
+$THY = @"  
+                      ___                                                                  ⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿
+                      \\ \                                                                 ⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄⠠⠀⠄
+                       \\ `\                                                               ⠄⡈⢀⠂⢈⠀⢂⠈⡀⠂⣈⣀⣂⣈⠀⠂⡈⢀⠂⢈⠀⢂⠈⡀⠂⢈⠀⢂⠈⡀⠂⢈⠀⢂⠈⠠
+    ___                 \\  \                                                              ⠄⠐⡀⢈⠀⠌⠀⣠⣶⣿⡿⠛⠋⠉⠙⠢⠀⠄⠂⠄⡈⠠⠐⠀⡁⠂⢈⠠⠐⠀⡁⠂⢈⠠⢀⠁
+   | ℂ⋆ \                \\  `\                                                            ⠈⠄⠐⡀⠌⢀⣾⣿⡿⠋⠀⡀⠂⢁⠂⠐⡀⠀⠄⠀⢀⠡⠀⠡⠀⠌⡀⠄⠂⠁⠄⡈⠄⢀⠂⢈
+   |_____\                \    \                                                           ⢁⠄⡀⠂⢸⣿⣿⠁⢀⠂⠄⠁⢂⠈⠄⠠⠁⢀⣸⣦:.⠀⠀⠌⡀⠄⠐⡈⠐⠠⢀⠂⠄⡈⢀
+   |______\                \    `\                                                         ⠂⢈⠀⡐⠀⢸⣿⣿⡀⠀⢂⠈⡐⠀⢂⠈⠄⢀⠉⢻⠟⠳⠄⠁⠄⠐⠈⠠⠐⠈⠠⢀⠂⠐⡀⠄
+   | 𐱅𐰇𐰼𐰰  \                \     \                                                        ⡈⠄⠐⢀⠂⠈⢿⣿⣷⡀⠂⠄⠐⢈⠀⡐⠈⠀⠄⠈⠀⠄⠠⠐⠈⠠⠁⠂⠌⢀⠡⠀⠄⡁⠠⠐
+   |Airlines\__---------------------------------._.                                        ⠠⢀⠁⠂⠠⢁⠠⠙⢿⣿⣷⣤⣌⣠⣀⠀⠀⠠⠐⠠⠁⡈⠄⠂⢁⠂⠁⠌⢀⠂⠠⢈⠀⠄⢁⠐
+ __|---~~~__o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_o_[][\__                                     ⠂⠄⡈⠄⢁⠠⢀⠂⠄⡀⠉⠉⠉⢁⠀⠄⡈⠐⠠⠁⡐⢀⠐⠈⡀⠄⢁⠂⠄⠂⢁⠠⠈⡀⠂⠄
+|___                         /~      )                \__                                  ⠂⡐⠀⡐⠠⢀⠂⢀⠂⠠⠁⠌⠐⡀⠌⠀⠄⢁⠂⠐⡀⠄⡈⠐⠀⠌⠀⠄⢂⠈⠄⠐⠠⢀⠡⠐
+    ~~~---..._______________/      ,/_________________/                                    ⣷⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶
+                           /      /
+                          /     ,/
+                         /     /
+                        /    ,/
+                       /    /
+                      //  ,/
+                     //  /
+                    // ,/
+                   //_/	
+"@
+
+Write-Host $THY
+
 #Seçim Ekranında Çıkacak Seçenekler.
 
 Write-Host " 1 - Çıkış."
@@ -446,9 +477,10 @@ remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -errora
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams"
-winget uninstall --name "Teams Machine-Wide Installer"
-winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
+winget uninstall --name "Microsoft Teams" -erroraction silentlycontinue -recurse
+winget uninstall --name "Teams Machine-Wide Installer" -erroraction silentlycontinue -recurse
+winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office" -erroraction silentlycontinue -recurse
+
 
 Write-Host ""
 Write-Host "İşlem Tamamlandı."
@@ -468,9 +500,9 @@ remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -errora
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams"
-winget uninstall --name "Teams Machine-Wide Installer"
-winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office"
+winget uninstall --name "Microsoft Teams" -erroraction silentlycontinue -recurse
+winget uninstall --name "Teams Machine-Wide Installer" -erroraction silentlycontinue -recurse
+winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office" -erroraction silentlycontinue -recurse
 
 
 
