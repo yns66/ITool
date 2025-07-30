@@ -35,18 +35,19 @@ Write-Host $THY
 
 #Seçim Ekranında Çıkacak Seçenekler.
 
-Write-Host " 1 - Çıkış."
-Write-Host " 2 - Kullanıcı Temizlemeyi Çalıştır."
-Write-Host " 3 - Disk Cleaneri Çalıştır."
-Write-Host " 4 - TEMP PREFETCH ve CCMCACHE Temizle."
-Write-Host " 5 - Önbellekteki Gereksiz Windows Güncelleme Dosyalarını Temizle Ve Performans İyileştirmesi Yap."
-Write-Host " 6 - Bozuk Sistem Dosyalarını Onar."
-Write-Host " 7 - GPO Temizle ve Tekrar Al."
-Write-Host " 8 - Outlook Durum Bilgisi Sorununu Düzeltme."
-Write-Host " 9 - Ağ Bağlantı Sorununu Giderme."
-Write-Host "10 - Teams ve Bağlantılarını Temizle. (Cihazda WINGET (App Installer Package) Komutunun Çalışması Gerekir.)"
-Write-Host "11 - Eski Sürüm Teamsı Silip Günceli İndir."
-Write-Host "12 - Microsoft Management Console (MMC) Komutları."
+Write-Host " 0 - Çıkış."
+Write-Host " 1 - Kullanıcı Temizlemeyi Çalıştır."
+Write-Host " 2 - Disk Cleaneri Çalıştır."
+Write-Host " 3 - TEMP PREFETCH ve CCMCACHE Temizle."
+Write-Host " 4 - Önbellekteki Gereksiz Windows Güncelleme Dosyalarını Temizle Ve Performans İyileştirmesi Yap."
+Write-Host " 5 - Bozuk Sistem Dosyalarını Onar."
+Write-Host " 6 - GPO Temizle ve Tekrar Al."
+Write-Host " 7 - Outlook Durum Bilgisi Sorununu Düzeltme."
+Write-Host " 8 - Ağ Bağlantı Sorununu Giderme."
+Write-Host " 9 - Teams ve Bağlantılarını Temizle. (Cihazda WINGET (App Installer Package) Komutunun Çalışması Gerekir.)"
+Write-Host "10 - Eski Sürüm Teamsı Silip Günceli İndir."
+Write-Host "11 - Microsoft Management Console (MMC) Komutları."
+Write-Host "12 - Confluence İçerisindeki Bazı Komutların Scripti"
 
 
 #Komutlar.
@@ -55,14 +56,14 @@ Write-Host ""
 $secim = Read-Host "Lütfen seçim yapınız."
 
 
-if ($secim -eq 1 ){
+if ($secim -eq 0 ){
 
 exit
 
 }
 
 
-elseif ($secim -eq 2) {
+elseif ($secim -eq 1) {
 
   
 Add-Type -AssemblyName System.Windows.Forms
@@ -201,7 +202,7 @@ Write-Host "İşlem Tamamlandı."
 
 
 
-elseif ($secim -eq 3) {
+elseif ($secim -eq 2) {
 
 # Pencere Adı Düzenle K.B.
 # $host.ui.RawUI.WindowTitle = "C DISK TEMIZLEYICI"
@@ -386,7 +387,7 @@ Write-Host "İşlem Tamamlandı."
 
 
 
-elseif($secim -eq 4){
+elseif($secim -eq 3){
 
 get-childitem "$env:windir\ccmcache\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 get-childitem "$env:windir\Temp\*" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
@@ -400,7 +401,7 @@ Write-Host "İşlem Tamamlandı."
 
 
 
-elseif($secim -eq 5){
+elseif($secim -eq 4){
 
 dism.exe /online /cleanup-image /startcomponentcleanup;
 dism.exe /online /cleanup-image /restorehealth
@@ -413,7 +414,7 @@ Write-Host "İşlem Tamamlandı."
 
 
 
-elseif($secim -eq 6){
+elseif($secim -eq 5){
 
 sfc /scannow
 
@@ -423,7 +424,7 @@ Write-Host "İşlem Tamamlandı."
 }
 
 
-elseif($secim -eq 7){
+elseif($secim -eq 6){
 
 get-childitem "$env:windir\System32\GroupPolicyUsers" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
 get-childitem "$env:windir\System32\GroupPolicy" -recurse -file | remove-item -force -ErrorAction SilentlyContinue;
@@ -439,7 +440,7 @@ Write-Host "İşlem Tamamlandı."
 }
 
 
-elseif($secim -eq 8){
+elseif($secim -eq 7){
 
 #Values to set$RegistryPath = 'HKLM:\SOFTWARE\IM Providers\MsTeams'$FriendlyName = 'Microsoft Teams'$GUID = "{88435F68-FFC1-445F-8EDF-EF78B84BA1C7}"$ProcessName = 'ms-teams.exe'# Create the key if it does not existIf (-NOT (Test-Path $RegistryPath)) {New-Item -Path $RegistryPath -Force | Out-Null}# Now set the valuesNew-ItemProperty -Path $RegistryPath -Name "FriendlyName" -Value $FriendlyName -PropertyType String -ForceNew-ItemProperty -Path $RegistryPath -Name "GUID" -Value $GUID -PropertyType String -ForceNew-ItemProperty -Path $RegistryPath -Name "ProcessName" -Value $ProcessName -PropertyType String -Force ;  remove-item $env:appdata\Microsoft\Teams
 
@@ -450,7 +451,7 @@ ayarı açık olması gerekiyor."
 }
 
 
-elseif($secim -eq 9){
+elseif($secim -eq 8){
 
 netsh int ip reset
 netsh winsock reset
@@ -468,7 +469,7 @@ Read-Host "Devam Etmek İçin Herhangi Bir Tuşa Basınız."
 }
 
 
-elseif ($secim -eq 10){
+elseif ($secim -eq 9){
 
 
 remove-item -path "$env:appdata\Microsoft\Teams" -force -erroraction silentlycontinue -recurse
@@ -489,7 +490,7 @@ Write-Host "İşlem Tamamlandı."
 }
 
 
-elseif ($secim -eq 11){
+elseif ($secim -eq 10){
 
 
 taskkill /f /im ms-teams.exe
@@ -538,10 +539,9 @@ Write-Host "İşlem Tamamlandı."
 }
 
 
-if ($secim -eq 12) {
+if ($secim -eq 11) {
     Write-Host "Disk Management Paneli"
     Write-Host "-------------------------"
-    Write-Host " 0. Geri Dön"
     Write-Host " 1. Disk Management Panelini Aç"
     Write-Host " 2. Kaydedilen Kullanıcı Adı ve Şifreler Paneli Aç"
     Write-Host " 3. Security Policy Panelini Aç"
@@ -552,18 +552,13 @@ if ($secim -eq 12) {
     Write-Host " 8. Bilgisayar Yönetimi Panelini Aç"
     Write-Host " 9. Yazıcı Yönetim Panelini Aç"
     Write-Host "10. Sertifika Panelini Aç"
-
-
+    Write-Host ""
+    Write-Host "Önceki Ekrana Dönmek İçin Enter'e Basınız."
+    Write-Host ""
 
     $altSecim = Read-Host "Seçiminizi girin"
 
-    if ($altSecim -eq 0) {
-
-        # Geri dönme işlemini burada tanımlayabilirsiniz
-        Write-Host "Geçersiz seçim. Lütfen tekrar deneyin."
-        }
-
-     elseif ($altSecim -eq 1) {
+    if ($altSecim -eq 1) {
         Start-Process diskmgmt.msc
     }        
     
@@ -603,6 +598,75 @@ if ($secim -eq 12) {
     elseif ($altSecim -eq 10) {
         Start-Process certmgr.msc
     }        
+
+
+}
+
+
+if ($secim -eq 12){
+
+ Write-Host "Faydalı Notlardaki Çözümlerin Scriptleri"
+    Write-Host "----------------------------------------"
+
+    Write-Host ""
+    Write-Host "Önceki Ekrana Dönmek İçin Enter'e Basınız."
+    Write-Host ""
+
+    Write-Host " 1. Adobe Acrobat Menü Kaybolma Sorunu"
+    Write-Host " 2. Outlook İçerisinde 'Hesabınızla İlgili Bir Sorun Var' Hatası İçin"
+
+    $faydalisecim = Read-Host "Seçiminizi Girin"
+
+    if ($faydalisecim -eq 0) {
+        # Geri dönme işlemini burada tanımlayabilirsiniz
+        Write-Host "Geçersiz seçim. Lütfen tekrar deneyin."
+    } elseif ($faydalisecim -eq 1) {
+        # Registry path
+        $regPath = "HKCU:\Software\Microsoft\Office\16.0\Common\Identity"
+
+        # Dword değerleri
+        $dwords = @{
+            "DisableAADWAM" = 1
+            "DisableADALatopWAMOverride" = 1
+            "EnableADAL" = 1
+        }
+
+        # Registry path kontrolü
+        if (!(Test-Path $regPath)) {
+            New-Item -Path $regPath -Force
+        }
+
+        # Dword oluşturma ve değer ataması
+        foreach ($dword in $dwords.GetEnumerator()) {
+            $name = $dword.Name
+            $value = $dword.Value
+            if (!(Get-ItemProperty -Path $regPath -Name $name -ErrorAction SilentlyContinue)) {
+                New-ItemProperty -Path $regPath -Name $name -PropertyType DWORD -Value $value -Force
+            } else {
+                Set-ItemProperty -Path $regPath -Name $name -Value $value -Type DWORD -Force
+            }
+        }
+
+        Write-Host "Registry ayarları oluşturuldu."
+    } elseif ($faydalisecim -eq 2) {
+        # Registry path
+        $regPath = "HKLM:\Software\Microsoft\Office\Word\Addins\pdfmaker.officeaddin"
+
+        # Değer
+        $value = 2
+
+        # Registry path kontrolü
+        if (Test-Path $regPath) {
+            # Değer güncelleme
+            Set-ItemProperty -Path $regPath -Name "LoadBehavior" -Value $value -Type DWORD -Force
+            Write-Host "Registry ayarı güncellendi."
+        } else {
+            Write-Host "Registry path bulunamadı."
+        }
+    
+}
+
+Write-Host "Registry ayarları oluşturuldu."
 
 
 }
