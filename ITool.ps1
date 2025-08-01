@@ -44,7 +44,7 @@ Write-Host " 5 - Bozuk Sistem Dosyalarını Onar."
 Write-Host " 6 - GPO Temizle ve Tekrar Al."
 Write-Host " 7 - Outlook Durum Bilgisi Sorununu Düzeltme."
 Write-Host " 8 - Ağ Bağlantı Sorununu Giderme."
-Write-Host " 9 - Teams ve Bağlantılarını Temizle. (Cihazda WINGET (App Installer Package) Komutunun Çalışması Gerekir.)"
+Write-Host " 9 - Teams ve Bağlantılarını Temizle."
 Write-Host "10 - Eski Sürüm Teamsı Silip Günceli İndir."
 Write-Host "11 - Microsoft Management Console (MMC) Komutları."
 Write-Host "12 - Confluence İçerisindeki Bazı Komutların Scripti"
@@ -478,9 +478,78 @@ remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -errora
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams" -erroraction silentlycontinue -recurse
-winget uninstall --name "Teams Machine-Wide Installer" -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office" -erroraction silentlycontinue -recurse
+
+
+$MicrosoftTeams = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Microsoft Teams*" }
+
+
+if ($MicrosoftTeams) {
+
+    Write-Host "Uninstalling Microsoft Teams..."
+
+    $MicrosoftTeams.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Microsoft Teams is not exist."
+
+}
+
+
+$MicrosoftTeamsClassic = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Microsoft Teams Classic*" }
+
+
+if ($MicrosoftTeamsClassic) {
+
+    Write-Host "Uninstalling Microsoft Teams Classic..."
+
+    $MicrosoftTeamsClassic.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Microsoft Teams Classic is not exist."
+
+}
+
+
+$TeamsMachineWide = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Teams Machine-Wide Installer*" }
+
+
+if ($TeamsMachineWide) {
+
+    Write-Host "Uninstalling Teams Machine-Wide Installer..."
+
+    $TeamsMachineWide.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Teams Machine-Wide Installer is not exist."
+
+}
+
+
+$MicrosoftTeamsMeeting = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Microsoft Teams Meeting Add-in for Microsoft Office*" }
+
+
+if ($MicrosoftTeamsMeeting) {
+
+    Write-Host "Uninstalling Microsoft Teams Meeting Add-in for Microsoft Office..."
+
+    $MicrosoftTeamsMeeting.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Microsoft Teams Meeting Add-in for Microsoft Office is not exist."
+
+}
 
 
 Write-Host ""
@@ -501,10 +570,79 @@ remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddin" -force -errora
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAdd-in" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsMeetingAddinMsis" -force -erroraction silentlycontinue -recurse
 remove-item -path "$env:localappdata\Microsoft\TeamsPresenceAddin" -force -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams" -erroraction silentlycontinue -recurse
-winget uninstall --name "Teams Machine-Wide Installer" -erroraction silentlycontinue -recurse
-winget uninstall --name "Microsoft Teams Meeting Add-in for Microsoft Office" -erroraction silentlycontinue -recurse
 
+
+
+$MicrosoftTeams = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Microsoft Teams*" }
+
+
+if ($MicrosoftTeams) {
+
+    Write-Host "Uninstalling Microsoft Teams..."
+
+    $MicrosoftTeams.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Microsoft Teams is not exist."
+
+}
+
+
+$MicrosoftTeamsClassic = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Microsoft Teams Classic*" }
+
+
+if ($MicrosoftTeamsClassic) {
+
+    Write-Host "Uninstalling Microsoft Teams Classic..."
+
+    $MicrosoftTeamsClassic.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Microsoft Teams Classic is not exist."
+
+}
+
+
+$TeamsMachineWide = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Teams Machine-Wide Installer*" }
+
+
+if ($TeamsMachineWide) {
+
+    Write-Host "Uninstalling Teams Machine-Wide Installer..."
+
+    $TeamsMachineWide.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Teams Machine-Wide Installer is not exist."
+
+}
+
+
+$MicrosoftTeamsMeeting = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Microsoft Teams Meeting Add-in for Microsoft Office*" }
+
+
+if ($MicrosoftTeamsMeeting) {
+
+    Write-Host "Uninstalling Microsoft Teams Meeting Add-in for Microsoft Office..."
+
+    $MicrosoftTeamsMeeting.Uninstall()
+
+    Write-Host "Uninstallation complete."
+
+} else {
+
+    Write-Host "Microsoft Teams Meeting Add-in for Microsoft Office is not exist."
+
+}
 
 
 $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"
@@ -528,7 +666,9 @@ try {
     Write-Host "İndirme sırasında bir hata oluştu: $($Error[0].Message)"
 }
 
-Start-Sleep -Seconds 1
+
+
+Start-Sleep -Seconds 2
 Start-Process "D:\MSTeamsSetup.exe"
 
 
